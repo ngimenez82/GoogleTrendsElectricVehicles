@@ -14,15 +14,16 @@ preserve
 
 * Keep only variables needed (optional but safer)
 * keep id_iso2 tm d_ln_bev d_att unem_rate cci cpi_all d_rel_price mdum2-mdum12
-local outpath "C:\Users\usuario\Desktop\projects\objetivo1_dga_final\results"
+local outpath "$results"
 
 * Winsorize (1st and 99th percentiles)
 cap which winsor2
 if _rc ssc install winsor2, replace
 
 cap drop d_ln_bev_w d_att_w cpi_all_w
-gen d_ln_bev_w = d_ln_bev
-winsor2 d_ln_bev_w, cuts(1 99)
+* FIX (Oct 2026): the previous code ran winsor2 without replace/suffix, which created
+* d_ln_bev_w_w and left d_ln_bev_w un-winsorized (Table A1 was identical to Table 2).
+winsor2 d_ln_bev, cuts(1 99) suffix(_w)
 * Optional (uncomment if you want)
 * winsor2 d_att,     cuts(1 99) gen(d_att_w)
 * winsor2 cpi_all,   cuts(1 99) gen(cpi_all_w)
@@ -62,7 +63,8 @@ xtreg d_ln_bev_w L.d_ln_bev_w ///
     mdum2-mdum12 ///
     , fe vce(cluster id_iso2)
 
-test L1.`ATT' + L2.`ATT' + L3.`ATT' + L4.`ATT' + L5.`ATT' + L6.`ATT' = 0
+* FIX (Oct 2026): joint test of the six lags
+testparm L(1/6).`ATT'
 scalar p_joint = r(p)
 
 lincom L1.`ATT' + L2.`ATT' + L3.`ATT' + L4.`ATT' + L5.`ATT' + L6.`ATT'
@@ -97,7 +99,8 @@ xtdcce2 d_ln_bev_w L.d_ln_bev_w ///
     mdum2-mdum12 ///
     , crosssectional(d_ln_bev_w `ATT') cr_lags(2)
 
-test L1.`ATT' + L2.`ATT' + L3.`ATT' + L4.`ATT' + L5.`ATT' + L6.`ATT' = 0
+* FIX (Oct 2026): joint test of the six lags
+testparm L(1/6).`ATT'
 scalar p_joint = r(p)
 
 lincom L1.`ATT' + L2.`ATT' + L3.`ATT' + L4.`ATT' + L5.`ATT' + L6.`ATT'
@@ -125,7 +128,7 @@ xtreg d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , fe vce(cluster id_iso2)
 
-local outpath "C:\Users\usuario\Desktop\projects\objetivo1_dga_final\results"
+local outpath "$results"
 local T1 "`outpath'\TableA2_forward_robustness.xls"
 
 testparm F(1/6).d_att

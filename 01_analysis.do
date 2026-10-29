@@ -5,10 +5,10 @@ set more off
 *******************************************************
 
 * Open data 
- use "C:\Users\usuario\Desktop\projects\objetivo1_dga_final\replication_GimenezNadaletal\dataset.dta"
+ use "$scripts/dataset.dta", clear
  
 * Choose output path  
-local outpath "C:\Users\usuario\Desktop\projects\objetivo1_dga_final\results" 
+local outpath "$results"
 ******************************************************
 *============================================================*
 * Table 1: DESCRIPTIVES
@@ -50,7 +50,8 @@ xtreg d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , fe vce(cluster id_iso2)
 
-test L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att = 0
+* FIX (Oct 2026): joint significance must test the six lags jointly, not their sum
+testparm L(1/6).d_att
 scalar p_joint = r(p)
 
 lincom L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att
@@ -85,7 +86,8 @@ xtdcce2 d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , crosssectional(d_ln_bev d_att) cr_lags(2)
 
-test L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att = 0
+* FIX (Oct 2026): joint significance must test the six lags jointly, not their sum
+testparm L(1/6).d_att
 scalar p_joint = r(p)
 
 lincom L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att
@@ -131,7 +133,8 @@ xtdcce2 d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , crosssectional(d_ln_bev d_att) cr_lags(2)
 
-test L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att = 0
+* FIX (Oct 2026): joint significance must test the six lags jointly, not their sum
+testparm L(1/6).d_att
 scalar p_joint = r(p)
 
 lincom L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att
@@ -154,7 +157,8 @@ xtdcce2 d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , crosssectional(d_ln_bev d_att) cr_lags(2)
 
-test L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att = 0
+* FIX (Oct 2026): joint significance must test the six lags jointly, not their sum
+testparm L(1/6).d_att
 scalar p_joint = r(p)
 
 lincom L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att
@@ -177,7 +181,8 @@ xtdcce2 d_ln_bev L.d_ln_bev ///
     mdum2-mdum12 ///
     , crosssectional(d_ln_bev d_att) cr_lags(2)
 
-test L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att = 0
+* FIX (Oct 2026): joint significance must test the six lags jointly, not their sum
+testparm L(1/6).d_att
 scalar p_joint = r(p)
 
 lincom L1.d_att + L2.d_att + L3.d_att + L4.d_att + L5.d_att + L6.d_att
