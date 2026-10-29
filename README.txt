@@ -1,7 +1,7 @@
 README — Replication Package
 
 Paper
-Title: Google Searches and Electric Vehicle Registrations: Evidence from European Union Countries
+Title: Do Google Searches Help Forecast Electric Vehicle Registrations? Evidence from European Union Countries
 Authors: José Ignacio Giménez-Nadal, Antonio Gutiérrez-Lythgoe, José Alberto Molina
 
 This folder contains the dataset and the code required to reproduce all tables and figures in the paper.
@@ -27,8 +27,14 @@ Python code (reference implementation; reproduces every number in the paper)
                           CCE lags, jackknife, BEV share, placebo search indicators)   -> out_insample.json
   python/oos.py           Pseudo out-of-sample forecasts, h = 1, 3, 6 (Clark-West, Diebold-Mariano) -> out_oos.json
   python/oos_variants.py  Parsimonious specifications and alternative evaluation windows -> out_oos_variants.json
-  python/tables.py        Builds all tables (Tables 1-3, A1, A2)                                    -> out_tables.json
+  python/tables.py        In-sample tables (summary statistics, FE/CCE estimates, appendix tables) -> out_tables.json
+  python/r2gain.py        Country x month FE column of Table 2 and R-squared gain from attention    -> out_r2gain.json
+  python/oos2.py          Main forecasting evaluation (Tables 4-5): benchmarks with alternative seasonality,
+                          search-augmented models, Clark-West, Diebold-Mariano, Pesaran-Timmermann tests,
+                          rolling window, alternative origins, h = 3, BEV share, subsidy months  -> out_oos2.json,
+                                                                                                   oos2_h1_forecasts.csv
   python/figure1.py       Figure 1                                                                   -> figures/figure1.png
+  python/figure2.py       Figure 2 (cumulative squared forecast error differences)                  -> figures/figure2.png
 
   Requirements: Python 3.10+, pandas, numpy, scipy, statsmodels, matplotlib.
   Run from the python/ folder, in this order:
@@ -36,7 +42,10 @@ Python code (reference implementation; reproduces every number in the paper)
       python oos.py
       python oos_variants.py
       python tables.py
+      python r2gain.py
+      python oos2.py
       python figure1.py
+      python figure2.py
 
 Stata code
   00_master.do, 01_analysis.do, 02_robustness.do
@@ -61,3 +70,6 @@ CHANGELOG (October 2026)
     variable un-winsorized.
   - Relative paths in 00_master.do.
   - Added Python implementation, out-of-sample forecasting evaluation, additional robustness checks and Figure 1.
+  - Forecasting version: extended evaluation (oos2.py), Table 2 column with country x month FE (r2gain.py), Figure 2.
+    Note: Google Trends series in dataset.dta were seasonally adjusted on the full sample, so the pseudo
+    out-of-sample exercise is not fully real-time; this look-ahead favours the search-augmented models.
