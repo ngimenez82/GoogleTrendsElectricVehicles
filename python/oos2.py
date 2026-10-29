@@ -6,6 +6,9 @@ import statsmodels.api as sm
 from scipy import stats as st
 OUTDIR = sys.argv[1] if len(sys.argv)>1 else '.'
 d = load(); g = d.groupby('iso2')
+from policy import add_policy
+_cal = sys.argv[2] if len(sys.argv)>2 else '../policy/policy_calendar_provisional.csv'
+d = add_policy(d, pd.read_csv(_cal)); POL = ['pol_pre','pol_post']
 d['ln_bev'] = d.ln_bev.astype(float)
 d['cm'] = d.iso2 + '_' + d.tm.dt.month.astype(str)
 # hybrid seasonality: common month dummies, except Ireland (semi-annual registration calendar) which gets its own month effects
@@ -21,7 +24,7 @@ for h in [3]:
 B0 = ['L_dlnbev']+MDUM
 BH = ['L_dlnbev']+HD
 SPEC = {'M0c': (B0,'iso2'), 'GT3c': (B0+['att_ma3'],'iso2'),
-        'M0h': (BH,'ck'), 'GT3h': (BH+['att_ma3'],'ck'), 'GT6h': (BH+ATT,'ck'), 'GT3h+now': (BH+['L0_att','att_ma3'],'ck'), 'M0h+macro': (BH+MAC,'ck'),
+        'M0h': (BH,'ck'), 'GT3h': (BH+['att_ma3'],'ck'), 'M0h+pol': (BH+POL,'ck'), 'GT3h+pol': (BH+POL+['att_ma3'],'ck'), 'GT6h': (BH+ATT,'ck'), 'GT3h+now': (BH+['L0_att','att_ma3'],'ck'), 'M0h+macro': (BH+MAC,'ck'),
         'M0': (B0,'cm'), 'M0+macro': (B0+MAC,'cm'), 'GT3': (B0+['att_ma3'],'cm'), 'GT3+now': (B0+['L0_att','att_ma3'],'cm'), 'GT6': (B0+ATT,'cm')}
 SPEC_CARS = {'M0h': (BH,'ck'), 'GT3h': (BH+['att_ma3'],'ck'), 'M0h+cars': (BH+['L_dcars'],'ck'), 'GT3h+cars': (BH+['L_dcars','att_ma3'],'ck')}
 POLICY = {('DE','2022-12'),('DE','2023-01'),('DE','2023-08'),('DE','2023-09'),('DE','2023-12'),('DE','2024-01'),('SE','2022-11'),('SE','2022-12'),('SE','2023-01')}
@@ -83,13 +86,13 @@ def absolute(r, models):
 out={}
 r = run(het=True)
 r.to_csv(f'{OUTDIR}/oos2_h1_forecasts.csv', index=False)
-models=['ZERO','SN','M0c','GT3c','M0','M0+macro','GT3','GT3+now','GT6','COMB','M0_het','GT3_het','M0h','GT3h','GT6h','GT3h+now','M0h+macro','COMBh']
+models=['M0h+pol','GT3h+pol','ZERO','SN','M0c','GT3c','M0','M0+macro','GT3','GT3+now','GT6','COMB','M0_het','GT3_het','M0h','GT3h','GT6h','GT3h+now','M0h+macro','COMBh']
 out['n']=len(r); out['T']=int(r.t.nunique()); out['G']=int(r.iso2.nunique()); out['n_policy']=int(r.policy.sum())
 out['abs']=absolute(r, models)
 cmp={}
 for alt,ben,nest in [('ZERO','M0',False),('SN','M0',False),('M0c','M0',False),('M0_het','M0',False),('GT3c','M0c',True),('M0+macro','M0',True),('GT3','M0',True),('GT3+now','M0',True),('GT6','M0',True),('COMB','M0',False),('GT3_het','M0_het',True),
                      ('M0c','M0h',False),('M0','M0h',False),('ZERO','M0h',False),('SN','M0h',False),('M0_het','M0h',False),('M0h+macro','M0h',True),
-                     ('GT3h','M0h',True),('GT6h','M0h',True),('GT3h+now','M0h',True),('COMBh','M0h',False)]:
+                     ('GT3h','M0h',True),('GT6h','M0h',True),('M0h+pol','M0h',True),('GT3h+pol','M0h+pol',True),('GT3h+now','M0h',True),('COMBh','M0h',False)]:
     cmp[f'{alt}|{ben}']=compare(r,alt,ben,nest)
 out['cmp']=cmp
 # policy episodes vs rest

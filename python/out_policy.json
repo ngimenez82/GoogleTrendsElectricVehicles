@@ -1,0 +1,77 @@
+{
+ "calendar": [
+  {
+   "iso2": "DE",
+   "effective_date": "2023-01-01",
+   "type": "cut",
+   "description": "Reduction of the Umweltbonus purchase premium",
+   "source": "Federal Office for Economic Affairs and Export Control (BAFA)"
+  },
+  {
+   "iso2": "DE",
+   "effective_date": "2023-09-01",
+   "type": "cut",
+   "description": "Commercial buyers excluded from the Umweltbonus",
+   "source": "BAFA"
+  },
+  {
+   "iso2": "DE",
+   "effective_date": "2023-12-18",
+   "type": "end",
+   "description": "Umweltbonus ended (applications closed)",
+   "source": "BAFA"
+  }
+ ],
+ "n_pre": 3,
+ "n_post": 3,
+ "FE": {
+  "sum_without": [
+   0.2728642270536798,
+   0.10296506594091073,
+   0.014974877304362977
+  ],
+  "sum_with": [
+   0.2722249181866592,
+   0.10286367097232355,
+   0.015094228537593235
+  ],
+  "joint_with": [
+   10.862858999153339,
+   1.584678302934961e-05
+  ],
+  "pre": [
+   0.3100649985356424,
+   0.0741346591998621
+  ],
+  "post": [
+   -1.080353473571052,
+   0.11007402453602542
+  ],
+  "N": 1708
+ },
+ "FE_cm": {
+  "sum_without": [
+   0.23823250085115433,
+   0.10612389294730602,
+   0.03567619497713892
+  ],
+  "sum_with": [
+   0.2376561753147379,
+   0.10598821236064263,
+   0.03586639317176399
+  ],
+  "joint_with": [
+   11.239858139591268,
+   1.2249197655966881e-05
+  ],
+  "pre": [
+   0.3286766629655541,
+   0.010807130434235632
+  ],
+  "post": [
+   -0.9753008246345394,
+   0.010464240088621145
+  ],
+  "N": 1708
+ }
+}

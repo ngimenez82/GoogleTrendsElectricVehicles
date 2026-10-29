@@ -33,8 +33,14 @@ Python code (reference implementation; reproduces every number in the paper)
                           search-augmented models, Clark-West, Diebold-Mariano, Pesaran-Timmermann tests,
                           rolling window, alternative origins, h = 3, BEV share, subsidy months  -> out_oos2.json,
                                                                                                    oos2_h1_forecasts.csv
+  python/policy.py        Subsidy-deadline indicators from a policy calendar (CSV) and in-sample test -> out_policy.json
+                          The calendar is read from policy/policy_calendar_provisional.csv
+                          (columns: iso2, effective_date, type, description, source); replace it with the
+                          full calendar and re-run policy.py and oos2.py.
   python/figure1.py       Figure 1                                                                   -> figures/figure1.png
   python/figure2.py       Figure 2 (cumulative squared forecast error differences)                  -> figures/figure2.png
+  python/figureA1.py      Figure A1 (search intensity vs registrations by country) + correlations  -> figures/figureA1.png,
+                                                                                                   out_figA1.json
 
   Requirements: Python 3.10+, pandas, numpy, scipy, statsmodels, matplotlib.
   Run from the python/ folder, in this order:
@@ -43,9 +49,11 @@ Python code (reference implementation; reproduces every number in the paper)
       python oos_variants.py
       python tables.py
       python r2gain.py
+      python policy.py
       python oos2.py
       python figure1.py
       python figure2.py
+      python figureA1.py
 
 Stata code
   00_master.do, 01_analysis.do, 02_robustness.do
